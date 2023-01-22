@@ -12,8 +12,6 @@ export function AppContext(props) {
     fetchSelectedCategoryData(selectCategories)
   }, [selectCategories]);
 
-  console.log(searchReasult);
-
   const fetchSelectedCategoryData = (query) => {
     setLoading(true);
     fetchDataFromYoutubeApi(query).then(data => {
