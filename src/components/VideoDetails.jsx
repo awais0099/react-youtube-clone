@@ -22,7 +22,7 @@ function VideoDetails() {
   const [relatedVideos, setRelatedVideos] = useState();
   const { id } = useParams();
   const { setLoading } = useContext(Context);
-  
+
   const [lineClamp, setLineClamp] = useState(true);
 
   useEffect(() => {
@@ -56,10 +56,10 @@ function VideoDetails() {
 
   return (
     <section className='bg-black'>
-      <div className='flex flex-row justify-between gap-5 px-4 mt-[57px]'>
+      <div className='flex flex-col md:flex-row justify-between gap-5 px-4 mt-[57px]'>
 
-        <div className='flex flex-col w-[70%] pb-5'>
-          <div className='h-[450px]'>
+        <div className='flex flex-col md:w-[70%] pb-5'>
+          <div className="h-[200px] md:h-[400px] lg:h-[400px] xl:h-[550px] ml-[-16px] lg:ml-0 mr-[-16px] lg:mr-0">
             <ReactPlayer
               url={`https://youtube.com/watch?v=${id}`}
               controls
@@ -67,54 +67,58 @@ function VideoDetails() {
               height="100%"
             />
           </div>
-          <div className='flex flex-col gap-3 mt-1'>
-            <h1 className='text-white font-bold text-xl'>{video?.title}</h1>
-            <div className='flex flex-row items-center justify-between'>
-              <div className='flex flex-row flex-2 gap-3 justify-start items-center'>
-                <img
-                  src={`${video?.author?.avatar?.[0]?.url}`}
-                  className='w-[36px] h-[36px] rounded-full'
-                />
-                  <p className='flex flex-col gap-0.5 text-white/[0.6]'>
-                    <span className='flex items-center gap-1 text-base text-white font-semibold'>
-                      {video?.author?.title}
-                      {video?.author?.badges?.[0]?.type === "VERIFIED_CHANNEL" ? <BsFillCheckCircleFill className='text-md' /> : ''}
-                    </span>
-                    <span className='text-sm font-medium'>{`${abbreviateNumber(video?.author?.stats?.subscribers, 2)} subscribers`}</span>
-                  </p>
+          <div className="text-white font-bold text-sm md:text-xl mt-4 line-clamp-2">
+            {video?.title}
+          </div>
+          <div className="flex justify-between flex-col md:flex-row mt-4">
+            <div className="flex">
+              <div className="flex items-start">
+                <div className="flex h-11 w-11 rounded-full overflow-hidden">
+                  <img
+                    className="h-full w-full object-cover"
+                    src={video?.author?.avatar[0]?.url}
+                  />
+                </div>
               </div>
-              <div className='flex items-center'>
-                <button className='flex gap-2 justify-center text-sm font-medium mr-2 text-white items-center rounded-3xl bg-white/10 hover:bg-white/20 py-2 px-5'>
-                  <BiLike className='text-xl' /> {`${abbreviateNumber(video?.stats?.likes, 2)}`}
-                </button>
-                <button className='flex gap-2 justify-center text-sm font-medium mr-2 text-white items-center rounded-3xl bg-white/10 hover:bg-white/20 py-2 px-5'>
-                  <BiDislike className='text-xl' />
-                </button>
-                <button className='flex gap-2 justify-center text-sm font-medium mr-2 text-white items-center rounded-3xl bg-white/10 hover:bg-white/20 py-2 px-5'>
-                  <IoIosShareAlt className='text-xl' /> Share
-                </button>
-                <button className='flex gap-2 justify-center text-sm text-white items-center rounded-full bg-white/10 hover:bg-white/20 h-[40px] w-[40px]'>
-                  <HiDotsHorizontal className='text-xl' />
-                </button>
+              <div className="flex flex-col ml-3">
+                <div className="text-white text-md font-semibold flex items-center">
+                  {video?.author?.title}
+                  {video?.author?.badges[0]?.type ===
+                    "VERIFIED_CHANNEL" && (
+                      <BsFillCheckCircleFill className="text-white/[0.5] text-[12px] ml-1" />
+                    )}
+                </div>
+                <div className="text-white/[0.7] text-sm">
+                  {video?.author?.stats?.subscribersText}
+                </div>
               </div>
             </div>
-            <div className=' bg-white/10 hover:bg-white/20 p-3 rounded-lg relative'>
-              <p className={`text-white ${lineClamp ? 'line-clamp-3':'line-clamp-none'}`}>
-                {video?.description}
-              </p>
-              <span className='absolute top-3 right-4 text-white cursor-pointer text-sm font-medium' onClick={() => setLineClamp(!lineClamp)}>Show more</span>
+            <div className="flex text-white mt-4 md:mt-0">
+              <div className="flex items-center justify-center h-11 px-6 rounded-3xl bg-white/[0.15]">
+                <AiOutlineLike className="text-xl text-white mr-2" />
+                {`${abbreviateNumber(
+                  video?.stats?.views,
+                  2
+                )} Likes`}
+              </div>
+              <div className="flex items-center justify-center h-11 px-6 rounded-3xl bg-white/[0.15] ml-4">
+                {`${abbreviateNumber(
+                  video?.stats?.views,
+                  2
+                )} Views`}
+              </div>
             </div>
           </div>
         </div>
-
-        {/* related videos */}
-        <div className='flex flex-col w-[30%]'>
+        <div className="flex flex-col py-6 px-4 overflow-y-auto lg:w-[350px] xl:w-[400px]">
           {relatedVideos?.contents?.map((item, index) => {
-            if (item?.type !== 'video') {
-              return false;
-            } else {
-              return <SuggestionVideoCard key={index} video={item?.video} />
-            }
+            if (item?.type !== "video") return false;
+            return (
+              <SuggestionVideoCard
+                key={index}
+                video={item?.video}
+              />
+            );
           })}
         </div>
       </div>

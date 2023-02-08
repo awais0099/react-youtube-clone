@@ -6,7 +6,7 @@ import { abbreviateNumber } from 'js-abbreviation-number';
 function SuggestionVideoCard({video}) {
   return (
     <Link to={`/video/${video?.videoId}`} className='mb-2'>
-      <div className='flex flex-row gap-3'>
+      <div className='flex flex-col md:flex-row gap-3'>
         <div className='overflow-hidden rounded-xl flex-3 lg:h-20 xl:h-24 w-40 min-w-[168px]'>
           <img src={`${video?.thumbnails?.[0]?.url}`} className='h-full w-full' />
         </div>
